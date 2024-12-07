@@ -29,15 +29,13 @@ public:
 
     // Aggregate bitboards
     Bitboard whitePieces, blackPieces; // All white and black pieces combined
+    Bitboard whitePawns, blackPawns;
+    Bitboard whiteKnights, blackKnights;
+    Bitboard whiteBishops, blackBishops;
+    Bitboard whiteRooks , blackRooks;
     Bitboard allPieces;                // All pieces on the board
     Bitboard emptySquares;             // Squares without any pieces
 
-    // Check functions for different things
-    // bool is_check(bool isWhite);
-    // bool is_checkmate(bool isWhite);
-    // bool is_stalemate(bool isWhite);
-    // bool can_castle(bool isWhite, bool kingside);
-    // bool en_passant(int from, int to, bool isWhite);
 
     // Constructor
     Board();
@@ -48,7 +46,7 @@ public:
     void remove_piece(Bitboard square, Bitboard &piece);         // Remove a specific piece
     bool is_square_empty(Bitboard square) const;                // Check if a square is empty
     void update_all();                                           // Update aggregate bitboards
-    void print_board() const;                                    // Print the entire board
+    void print_board() const;                                    // Print the entire board  
     void print_piece(Bitboard piece) const;                     // Print a specific piece bitboard
     void capture_piece(Bitboard to);
     void copy(const Board &other);                              // Function to copy the code

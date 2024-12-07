@@ -12,29 +12,43 @@ void Board::initialize() {
     whitePawnA = set_bit(0ULL, A2);    whitePawnB = set_bit(0ULL, B2);   whitePawnC = set_bit(0ULL, C2);
     whitePawnD = set_bit(0ULL, D2);    whitePawnE = set_bit(0ULL, E2);   whitePawnF = set_bit(0ULL, F2);
     whitePawnG = set_bit(0ULL, G2);    whitePawnH = set_bit(0ULL, H2);
+    whitePawns = whitePawnA | whitePawnB | whitePawnC | whitePawnD | 
+                 whitePawnE | whitePawnF | whitePawnG | whitePawnH;
 
     // Initialize black pawns
     blackPawnA = set_bit(0ULL, A7);    blackPawnB = set_bit(0ULL, B7);   blackPawnC = set_bit(0ULL, C7);
     blackPawnD = set_bit(0ULL, D7);    blackPawnE = set_bit(0ULL, E7);   blackPawnF = set_bit(0ULL, F7);
     blackPawnG = set_bit(0ULL, G7);    blackPawnH = set_bit(0ULL, H7);
+    blackPawns = blackPawnA | blackPawnB | blackPawnC | blackPawnD | 
+                 blackPawnE | blackPawnF | blackPawnG | blackPawnH;
 
     // Initialize knights
     whiteKnight1 = set_bit(0ULL, B1);  whiteKnight2 = set_bit(0ULL, G1);
+    whiteKnights = whiteKnight1 | whiteKnight2;
     blackKnight1 = set_bit(0ULL, B8);  blackKnight2 = set_bit(0ULL, G8);
+    blackKnights = blackKnight1 | blackKnight2;
 
     // Initialize bishops
     whiteBishop1 = set_bit(0ULL, C1);  whiteBishop2 = set_bit(0ULL, F1);
+    whiteBishops = whiteBishop1 | whiteBishop2;
     blackBishop1 = set_bit(0ULL, C8);  blackBishop2 = set_bit(0ULL, F8);
+    blackBishops = blackBishop1 | blackBishop2;
 
     // Initialize rooks
     whiteRook1 = set_bit(0ULL, A1);    whiteRook2 = set_bit(0ULL, H1);
+    whiteRooks = whiteRook1 | whiteRook2;
     blackRook1 = set_bit(0ULL, A8);    blackRook2 = set_bit(0ULL, H8);
+    blackRooks = blackRook1 | blackRook2;
 
     // Initialize queens
     whiteQueen = set_bit(0ULL, D1);    blackQueen = set_bit(0ULL, D8);
 
     // Initialize kings
     whiteKing = set_bit(0ULL, E1);     blackKing = set_bit(0ULL, E8);
+
+
+
+
 
     // Combine all white pieces
     whitePieces = whitePawnA | whitePawnB | whitePawnC | whitePawnD |   whitePawnE | whitePawnF | whitePawnG | whitePawnH |
@@ -66,6 +80,7 @@ void Board::make_move(Bitboard from, Bitboard to, Bitboard &piece) {
     // Move the piece to the new location
     piece = clear_bit(piece, from);  // Clear the piece from the 'from' position
     piece = set_bit(piece, to);      // Set the piece at the 'to' position
+
 
     // Update all pieces and empty squares
     update_all();
@@ -258,12 +273,6 @@ bool Board::is_square_empty(Bitboard square) const {
 }
 
 
-void Board::print_board() const {
-    std::cout << "Current Board State:" << std::endl;
-    print_bitboard(allPieces);
-}
-
-
 void Board::print_piece(Bitboard piece) const {
     print_bitboard(piece);
 }
@@ -339,4 +348,42 @@ void Board::copy(const Board &other) {
     blackPieces = other.blackPieces;
     allPieces = other.allPieces;
     emptySquares = other.emptySquares;
+}
+
+const char* pieceSymbols[] = {
+    "♙", // White Pawn
+    "♘", // White Knight
+    "♗", // White Bishop
+    "♖", // White Rook
+    "♕", // White Queen
+    "♔", // White King
+    "♟", // Black Pawn
+    "♞", // Black Knight
+    "♝", // Black Bishop
+    "♜", // Black Rook
+    "♛", // Black Queen
+    "♚"  // Black King
+};
+
+void Board::print_board() const {
+    for (int row = 0; row < 8; ++row) {
+        for (int col = 0; col < 8; ++col) {
+            int square = row * 8 + col;
+            // Print the piece on the current square
+            if (is_bit_set(whitePawns, square)) std::cout << "♙ "; // White Pawn
+            else if (is_bit_set(blackPawns, square)) std::cout << "♟ "; // Black Pawn
+            else if (is_bit_set(whiteRooks, square)) std::cout << "♖ "; // White Rook
+            else if (is_bit_set(blackRooks, square)) std::cout << "♜ "; // Black Rook
+            else if (is_bit_set(whiteKnights, square)) std::cout << "♘ "; // White Knight
+            else if (is_bit_set(blackKnights, square)) std::cout << "♞ "; // Black Knight
+            else if (is_bit_set(whiteBishops, square)) std::cout << "♗ "; // White Bishop
+            else if (is_bit_set(blackBishops, square)) std::cout << "♝ "; // Black Bishop
+            else if (is_bit_set(whiteQueen, square)) std::cout << "♕ "; // White Queen
+            else if (is_bit_set(blackQueen, square)) std::cout << "♛ "; // Black Queen
+            else if (is_bit_set(whiteKing, square)) std::cout << "♔ "; // White King
+            else if (is_bit_set(blackKing, square)) std::cout << "♚ "; // Black King
+            else std::cout << ". "; // Empty square
+        }
+        std::cout << "\n";
+    }
 }
